@@ -35,7 +35,7 @@ public class AvatarController : MonoBehaviour
     {
         if (animator)
         {
-            Debug.Log("S");
+           // Debug.Log("S");
             Vector3 side1;
             Vector3 side2;
 

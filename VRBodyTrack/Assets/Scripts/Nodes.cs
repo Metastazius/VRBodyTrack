@@ -8,11 +8,13 @@ using UnityEngine;
 public class Nodes : MonoBehaviour
 {
     public MediapipeRTStream data;
-    public GameObject avatar;
+    public GameObject avatarY;
+    public GameObject avatarX;
     public GameObject node_pref;
     private BinaryReader reader;
     public List<GameObject> nodes = new List<GameObject>();
     private List<SkinnedMeshRenderer> y;
+    private List<SkinnedMeshRenderer> x;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,8 +24,13 @@ public class Nodes : MonoBehaviour
             var node=Instantiate(node_pref);
             nodes.Add(node);
         }
-        y = avatar.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+        y = avatarY.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+        x = avatarX.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
         foreach (var os in y)
+        {
+            os.enabled = false;
+        }
+        foreach (var os in x)
         {
             os.enabled = false;
         }
@@ -58,22 +65,7 @@ public class Nodes : MonoBehaviour
         
     }
     
-    public void pressedButton2()
-    {
-        foreach (var node in nodes)
-        {
-            node.GetComponentInChildren<MeshRenderer>().enabled = false;
-            
-            Debug.Log("sad");
-        }
-
-        
-        foreach(var os in y)
-        {
-            os.enabled = true;
-        }
-    }
-
+   
     public void pressedButton1()
     {
         foreach (var node in nodes)
@@ -84,6 +76,71 @@ public class Nodes : MonoBehaviour
         foreach (var os in y)
         {
             os.enabled = false;
+        }
+        foreach (var os in x)
+        {
+            os.enabled = false;
+        }
+    }
+    public void pressedButton2()
+    {
+        foreach (var node in nodes)
+        {
+            node.GetComponentInChildren<MeshRenderer>().enabled = false;
+
+            Debug.Log("sad");
+        }
+
+
+        foreach (var os in y)
+        {
+            os.enabled = true;
+        }
+        foreach (var os in x)
+        {
+            os.enabled = false;
+        }
+    }
+
+    public void listOption1()
+    {
+        foreach (var node in nodes)
+        {
+            node.GetComponentInChildren<MeshRenderer>().enabled = false;
+
+            Debug.Log("sad");
+        }
+
+
+        foreach (var os in y)
+        {
+            os.enabled = true;
+        }
+
+        foreach (var os in x)
+        {
+            os.enabled = false;
+        }
+    }
+    
+    public void listOption2()
+    {
+        foreach (var node in nodes)
+        {
+            node.GetComponentInChildren<MeshRenderer>().enabled = false;
+
+            Debug.Log("sad");
+        }
+
+
+        foreach (var os in y)
+        {
+            os.enabled = false;
+        }
+
+        foreach (var os in x)
+        {
+            os.enabled = true;
         }
     }
 }

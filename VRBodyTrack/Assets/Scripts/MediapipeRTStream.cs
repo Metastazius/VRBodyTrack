@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Diagnostics;
 
 public class MediapipeRTStream : MonoBehaviour
@@ -25,17 +26,21 @@ public class MediapipeRTStream : MonoBehaviour
     public BinaryReader br;
     const int LINES_COUNT = 11;
     public string[] lines;
+    public Text angleRE;
     void Awake()
     {
        // runPython();
 
         // Open the named pipe.
         server = new NamedPipeServerStream("VRBodyTrack", PipeDirection.InOut, 99, PipeTransmissionMode.Message);
-       // UnityEngine.Debug.Log("Waiting for connection...");
+        UnityEngine.Debug.Log("Waiting for connection...");
         server.WaitForConnection();
-        //UnityEngine.Debug.Log("Connected.");
+        UnityEngine.Debug.Log("Connected.");
+        
+        //initialise a BinaryReader to get the data from the named pipe
         br = new BinaryReader(server);
 
+        //start a thread to get the data through it from the pipe
         Thread t = new Thread(new ThreadStart(connected));
         t.Start();
     }
@@ -49,7 +54,10 @@ public class MediapipeRTStream : MonoBehaviour
         
             try
             {
-
+                /*For each frame, len gets the data from the pipe which is then transformed into
+                string in str to be able to separate the lines (each line representing a Mediapipe node) to parse them and reform the coordinates into Vector3 objects.
+                In this script, the nodes that are saved are the nodes for the angles of interest of the body (elbows, shoulders, hips and knees)
+                */
                 var len = (int)br.ReadUInt32();
                 var str = new string(br.ReadChars(len));
 
@@ -140,15 +148,14 @@ public class MediapipeRTStream : MonoBehaviour
                     angleLeftShoulder = Vector3.Angle(lArm, lTorso);
                     angleLeftHip = Vector3.Angle(lTorso, lLeg);
                     angleLeftKnee = Vector3.Angle(lLeg, lCalf);
-
                     //UnityEngine.Debug.Log("Right Elbow Angle in real-time stream: " + angleRightElbow);
-                   // UnityEngine.Debug.Log("Right Shoulder Angle in real-time stream: " + angleRightShoulder);
-                   // UnityEngine.Debug.Log("Right Hip Angle in real-time stream: " + angleRightHip);
-                   // UnityEngine.Debug.Log("Right Knee Angle in real-time stream: " + angleRightKnee);
-                   // UnityEngine.Debug.Log("Left Elbow Angle in real-time stream: " + angleLeftElbow);
-                   // UnityEngine.Debug.Log("Left Shoulder Angle in real-time stream: " + angleLeftShoulder);
+                    // UnityEngine.Debug.Log("Right Shoulder Angle in real-time stream: " + angleRightShoulder);
+                    // UnityEngine.Debug.Log("Right Hip Angle in real-time stream: " + angleRightHip);
+                    // UnityEngine.Debug.Log("Right Knee Angle in real-time stream: " + angleRightKnee);
+                    // UnityEngine.Debug.Log("Left Elbow Angle in real-time stream: " + angleLeftElbow);
+                    // UnityEngine.Debug.Log("Left Shoulder Angle in real-time stream: " + angleLeftShoulder);
                     //UnityEngine.Debug.Log("Left Hip Angle in real-time stream: " + angleLeftHip);
-                   // UnityEngine.Debug.Log("Left Knee Angle in real-time stream: " + angleLeftKnee);
+                    // UnityEngine.Debug.Log("Left Knee Angle in real-time stream: " + angleLeftKnee);
                 }
 
             }
@@ -161,6 +168,9 @@ public class MediapipeRTStream : MonoBehaviour
     }
     void runPython()
     {
+        //WIP, this code should start the python MediaPipe server at the start of the project
+
+
         string pythonPath = "C:/Users/matei/AppData/Local/Programs/Python/Python39/python.exe"; // e.g., "C:/Python39/python.exe"
 
         // Replace this with the path to your Python script

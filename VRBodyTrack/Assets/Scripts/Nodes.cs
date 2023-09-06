@@ -18,12 +18,17 @@ public class Nodes : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //gets the mediapipe data through the binaryreader from the MediapipeRTStream script
         reader = data.br;
+
+        //instantiates the spheres that will be used as nodes in the 3D enviroment
         for (int i = 0; i < 33; i++) {
             
             var node=Instantiate(node_pref);
             nodes.Add(node);
         }
+
+        //derenders the avatars at the start
         y = avatarY.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
         x = avatarX.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
         foreach (var os in y)
@@ -40,7 +45,7 @@ public class Nodes : MonoBehaviour
     {
         try
         {
-
+            //similar to MediapipeRTStream.cs, but here all the nodes are saved as Vector3 objects into a list
             var len = (int)reader.ReadUInt32();
             var str = new string(reader.ReadChars(len));
 
@@ -68,6 +73,7 @@ public class Nodes : MonoBehaviour
    
     public void pressedButton1()
     {
+        //nodes button in unity, derenders the avatars and rerenders the nodes
         foreach (var node in nodes)
         {
             node.GetComponentInChildren<MeshRenderer>().enabled = true;
@@ -84,6 +90,7 @@ public class Nodes : MonoBehaviour
     }
     public void pressedButton2()
     {
+        //avatar button in unity, derenders avatar X and the nodes and rerenders avatar Y
         foreach (var node in nodes)
         {
             node.GetComponentInChildren<MeshRenderer>().enabled = false;
@@ -101,9 +108,12 @@ public class Nodes : MonoBehaviour
             os.enabled = false;
         }
     }
-
+    
+    //avatar list in unity, derenders the avatar and the nodes and rerenders the avatar depending on the name
+    //note: buggy, might be resolved from the unity editor
     public void listOption1()
     {
+        
         foreach (var node in nodes)
         {
             node.GetComponentInChildren<MeshRenderer>().enabled = false;

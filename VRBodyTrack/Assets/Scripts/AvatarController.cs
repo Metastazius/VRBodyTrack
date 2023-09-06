@@ -11,19 +11,21 @@ public class AvatarController : MonoBehaviour
     public Transform[] bones;
     private List<Vector3> position = new List<Vector3>();
     public MediapipeRTStream data;
-    private string[] lines;
     public Nodes nodes;
     // Start is called before the first frame update
     void Start()
     {
-        lines = data.lines;
+        //avatars animator used for inverse kinematics
         animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        //position is a list that saves the coordinates of the MediaPipe nodes gotten from Nodes.cs in order
         position = nodes.nodes.Select(p=>p.transform.position).ToList();
+        
+        //direct bone manipulation of the avatars structure for the shoulders and hips
         bones[0].position = position[12];
         bones[1].position = position[11];
         bones[2].position = position[24];
@@ -35,13 +37,8 @@ public class AvatarController : MonoBehaviour
     {
         if (animator)
         {
-           // Debug.Log("S");
             Vector3 side1;
             Vector3 side2;
-
-            // Set the left arm IK
-         
-            // Set the right arm IK
 
             // Set the left hand IK
             Vector3 pointLH = ((position[19] + position[17]) / 2.0f);

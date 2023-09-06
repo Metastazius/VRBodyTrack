@@ -4,7 +4,7 @@ import global_vars
 from sys import exit
 
 #global_vars.CAMERA=input("Camera number: ")
-global_vars.CAMERA=0
+global_vars.CAMERA=1
 thread = BodyThread()
 thread.start()
 
